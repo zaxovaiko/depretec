@@ -1,18 +1,34 @@
 # How It Works
 
-depdet runs two passes over a TypeScript Program built via [ts-morph](https://ts-morph.com).
+depretec runs two passes over a TypeScript Program built via [ts-morph](https://ts-morph.com).
 
-## Pass 1: Collect deprecated declarations
+## File discovery
 
-Walks every declaration in scope — `function`, `method`, `class`, `property`, `variable`, `type`, `interface`, `enum`, and accessor — and checks for a `@deprecated` JSDoc tag.
+depretec never loads your whole dependency tree. Instead:
 
-This includes:
-- Your own source files
-- Type definitions in `node_modules` (`.d.ts` files) — unless `--no-deps` is set
+1. **Inside a git repo**: uses `git ls-files --cached --others --exclude-standard` scoped to the target directory. This automatically honors `.gitignore`, `.git/info/exclude`, and the user's global `core.excludesfile` — so generated code, build outputs, caches, and minified files are skipped without any config.
+2. **Outside a git repo**: falls back to a broad `**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}` glob with minimal excludes (`node_modules`, `dist`, `build`, `*.min.*`).
+3. **With `--include`**: user-supplied globs take over entirely.
 
-## Pass 2: Match identifiers in your source
+On top of that, any file whose first 512 bytes contain `@generated`, `GENERATED FILE/CODE`, or `DO NOT EDIT` is skipped. This catches Prisma clients, GraphQL codegen output, protobuf, Flow, and other tools that follow the generated-code convention.
 
-Every identifier in your source files is checked against the TypeScript type checker to see if it resolves to a deprecated declaration.
+`.d.ts` files in `node_modules` are **never** explicitly loaded — the TypeScript type checker resolves them lazily when it needs to, keeping memory proportional to imports rather than dep count.
+
+## Pass 1: Collect deprecated declarations (user source)
+
+Walks every declaration in the project's source files — `function`, `method`, `class`, `property`, `variable`, `type`, `interface`, `enum`, and accessor — and checks for a `@deprecated` JSDoc tag.
+
+Produces the `deprecations` list in the report (user-declared deprecated symbols).
+
+## Pass 2: Match identifiers lazily
+
+Every identifier in your source files is resolved through the TypeScript type checker. For each identifier:
+
+1. Get its symbol (follows re-exports and aliases)
+2. For each declaration of that symbol, check for `@deprecated` JSDoc
+3. If found, record an occurrence
+
+This pass handles both user-defined and dependency-defined deprecations. TypeScript loads the relevant `.d.ts` on demand — we never pre-scan `node_modules`.
 
 The checker follows:
 - Re-exports (`export { foo } from './bar'`)
@@ -21,16 +37,16 @@ The checker follows:
 
 ## Replacement extraction
 
-For each deprecated declaration, depdet tries to extract the replacement hint in this order:
+For each deprecated declaration, depretec tries to extract the replacement hint in this order:
 
 | Strategy | Example JSDoc |
 |----------|--------------|
 | `{@link X}` | `@deprecated Use {@link newFn} instead` |
 | `{@linkcode X}` | `@deprecated {@linkcode newFn}` |
 | `{@linkplain X}` | `@deprecated {@linkplain newFn}` |
-| Free-text: use | `@deprecated Use newFn instead` |
-| Free-text: replaced by | `@deprecated Replaced by newFn` |
-| Free-text: prefer | `@deprecated Prefer newFn` |
+| Free-text: use | `@deprecated Use \`newFn\` instead` |
+| Free-text: replaced by | `@deprecated Replaced by \`newFn\`` |
+| Free-text: prefer | `@deprecated Prefer \`newFn\`` |
 | Bareword variants | `@deprecated newFn` |
 
 If no hint is found, `replacement` is `null`.

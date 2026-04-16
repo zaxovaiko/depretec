@@ -42,6 +42,9 @@ cli
     }
 
     const cwd = paths[0] ?? process.cwd();
+    if (format === "pretty" && process.stderr.isTTY) {
+      process.stderr.write(`🔍 Scanning ${cwd} for @deprecated usages...\n`);
+    }
     const report = await scan({
       cwd,
       project: flags.project,

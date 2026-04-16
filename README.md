@@ -5,7 +5,7 @@ Find `@deprecated` JSDoc usages in your JS/TS project and map them to their repl
 - Scans your source **and** your `node_modules` types for `@deprecated` symbols.
 - Extracts the replacement hint from both `{@link X}` and free-text ("Use `X` instead", "Replaced by `X`", "Prefer `X`").
 - Outputs a pretty table, JSON (LLM-friendly), or Markdown (PR-friendly).
-- Zero config. Respects your `tsconfig.json` when present.
+- Zero config. Respects your `.gitignore` and `tsconfig.json`, skips `@generated` files.
 
 ## Install / run
 

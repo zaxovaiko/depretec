@@ -8,6 +8,14 @@ depdet [paths...] [options]
 
 The first positional `path` sets the project root. Defaults to the current working directory.
 
+## File discovery
+
+In a git repo, depretec scans files listed by `git ls-files --cached --others --exclude-standard` — automatically respecting your `.gitignore`. Files containing `@generated` or `DO NOT EDIT` markers in their header are skipped.
+
+Outside a git repo, depretec falls back to a broad glob with minimal excludes (`node_modules`, `dist`, `build`, `*.min.*`).
+
+Pass `--include` to override discovery entirely with your own globs.
+
 ## Options
 
 | Flag | Short | Type | Default | Description |

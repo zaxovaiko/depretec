@@ -18,7 +18,7 @@ hero:
 
 features:
   - title: Zero config
-    details: Drop it in any project. Detects tsconfig.json automatically. No setup required.
+    details: Drop it in any project. Auto-respects .gitignore, detects tsconfig.json, skips @generated files. No setup required.
   - title: Source + deps
     details: Scans both your source files and node_modules type definitions — finds deprecated usage no matter where the symbol comes from.
   - title: Replacement hints
