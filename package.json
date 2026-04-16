@@ -1,6 +1,6 @@
 {
   "name": "depretec",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Find @deprecated JSDoc usages in your JS/TS project and map them to their replacements.",
   "type": "module",
   "bin": {
