@@ -31,6 +31,7 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "bun run build && bun test",
     "lint": "oxlint src/",
+    "release": "release-it",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -42,9 +43,11 @@
     "ts-morph": "28.0.0"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.6",
     "@types/bun": "1.3.12",
     "@types/node": "25.6.0",
     "oxlint": "1.60.0",
+    "release-it": "^20.0.0",
     "typescript": "6.0.2",
     "vitepress": "^1.6.3",
     "zod": "4.3.6"
