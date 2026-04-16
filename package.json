@@ -61,5 +61,8 @@
     "lint",
     "cli"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -13,7 +13,6 @@ export default {
   },
   npm: {
     publish: true,
-    publishArgs: ['--access public'],
   },
   plugins: {
     '@release-it/conventional-changelog': {
