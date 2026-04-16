@@ -5,15 +5,15 @@ depdet exposes a `scan()` function for use in scripts, custom tooling, or editor
 ## Installation
 
 ```sh
-npm add @zaxovaiko/depdet
-pnpm add @zaxovaiko/depdet
-bun add @zaxovaiko/depdet
+npm add depretec
+pnpm add depretec
+bun add depretec
 ```
 
 ## `scan(options?)`
 
 ```ts
-import { scan } from '@zaxovaiko/depdet'
+import { scan } from 'depretec'
 
 const report = await scan({ cwd: './my-project' })
 ```
@@ -52,7 +52,7 @@ interface Occurrence {
 ### List all deprecated usages
 
 ```ts
-import { scan } from '@zaxovaiko/depdet'
+import { scan } from 'depretec'
 
 const { occurrences } = await scan()
 
@@ -65,7 +65,7 @@ for (const o of occurrences) {
 ### Fail a script if deprecated APIs are found
 
 ```ts
-import { scan } from '@zaxovaiko/depdet'
+import { scan } from 'depretec'
 
 const { occurrences } = await scan({ cwd: './packages/core' })
 
@@ -78,7 +78,7 @@ if (occurrences.length > 0) {
 ### Filter to a specific package
 
 ```ts
-import { scan } from '@zaxovaiko/depdet'
+import { scan } from 'depretec'
 
 const { occurrences } = await scan({
   cwd: '.',

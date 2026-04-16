@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'depdet',
+  title: 'depretec',
   description: 'Find @deprecated JSDoc usages in your JS/TS project and map them to their replacements.',
   base: '/depdet/',
   head: [['link', { rel: 'icon', href: '/depdet/favicon.ico' }]],
@@ -10,7 +10,7 @@ export default defineConfig({
       { text: 'Guide', link: '/getting-started' },
       { text: 'CLI Reference', link: '/cli-reference' },
       { text: 'API', link: '/api' },
-      { text: 'npm', link: 'https://www.npmjs.com/package/depdet' },
+      { text: 'npm', link: 'https://www.npmjs.com/package/depretec' },
     ],
     sidebar: [
       {

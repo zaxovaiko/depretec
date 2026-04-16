@@ -5,16 +5,16 @@
 Run without installing:
 
 ```sh
-npx @zaxovaiko/depdet
-bunx depdet
+npx depretec
+bunx depretec
 ```
 
 Pin as a dev dependency:
 
 ```sh
-npm add -D @zaxovaiko/depdet
-pnpm add -D @zaxovaiko/depdet
-bun add -D @zaxovaiko/depdet
+npm add -D depretec
+pnpm add -D depretec
+bun add -D depretec
 ```
 
 **Requirements:** Node.js ≥18 or Bun ≥1.1
@@ -33,10 +33,10 @@ export const Schema = z.object({
 })
 ```
 
-Run depdet in your project root:
+Run depretec in your project root:
 
 ```sh
-$ npx @zaxovaiko/depdet
+$ npx depretec
 ┌───────────────────┬─────────────────┬───┬─────────────┐
 │ Location          │ Deprecated      │ → │ Replacement │
 ├───────────────────┼─────────────────┼───┼─────────────┤
@@ -49,7 +49,7 @@ $ npx @zaxovaiko/depdet
 ## Feed results to an LLM
 
 ```sh
-npx @zaxovaiko/depdet --format json | llm -s "Apply these replacements to the files."
+npx depretec --format json | llm -s "Apply these replacements to the files."
 ```
 
 ## Use in CI
@@ -57,7 +57,7 @@ npx @zaxovaiko/depdet --format json | llm -s "Apply these replacements to the fi
 Block merges when deprecated APIs are detected:
 
 ```sh
-npx @zaxovaiko/depdet --fail-on-found
+npx depretec --fail-on-found
 ```
 
 Exit code is `1` if any occurrences are found, `0` otherwise.
@@ -65,5 +65,5 @@ Exit code is `1` if any occurrences are found, `0` otherwise.
 ## Scan a subdirectory
 
 ```sh
-npx @zaxovaiko/depdet packages/core
+npx depretec packages/core
 ```

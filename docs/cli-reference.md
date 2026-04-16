@@ -28,7 +28,7 @@ The first positional `path` sets the project root. Defaults to the current worki
 Human-readable table printed to stdout.
 
 ```sh
-npx @zaxovaiko/depdet
+npx depretec
 ```
 
 ```
@@ -44,7 +44,7 @@ npx @zaxovaiko/depdet
 Machine-readable JSON — ideal for piping to LLMs or custom scripts.
 
 ```sh
-npx @zaxovaiko/depdet --format json
+npx depretec --format json
 ```
 
 ```json
@@ -68,30 +68,30 @@ npx @zaxovaiko/depdet --format json
 Markdown table — paste directly into PR descriptions or GitHub comments.
 
 ```sh
-npx @zaxovaiko/depdet --format md
+npx depretec --format md
 ```
 
 ## Examples
 
 ```sh
 # scan current directory
-npx @zaxovaiko/depdet
+npx depretec
 
 # scan a specific package in a monorepo
-npx @zaxovaiko/depdet packages/core
+npx depretec packages/core
 
 # only your source, skip node_modules types
-npx @zaxovaiko/depdet --no-deps
+npx depretec --no-deps
 
 # fail in CI if any deprecated APIs are used
-npx @zaxovaiko/depdet --fail-on-found
+npx depretec --fail-on-found
 
 # output markdown for a PR description
-npx @zaxovaiko/depdet --format md >> pr-body.md
+npx depretec --format md >> pr-body.md
 
 # pipe JSON to an LLM
-npx @zaxovaiko/depdet --format json | llm -s "Apply these replacements."
+npx depretec --format json | llm -s "Apply these replacements."
 
 # use a non-standard tsconfig
-npx @zaxovaiko/depdet --project tsconfig.build.json
+npx depretec --project tsconfig.build.json
 ```
