@@ -22,6 +22,11 @@ describe('findOccurrences (custom-deprecated fixture)', () => {
     expect(legacyOccurrences.length).toBe(0)
   })
 
+  test('flags only calls that resolve to a deprecated overload', () => {
+    const pickOccurrences = occurrences.filter((o) => o.deprecation.qualifiedName === 'pick')
+    expect(pickOccurrences.map((o) => o.snippet)).toEqual(["const d = pick('one')"])
+  })
+
   test('occurrences carry file + line + snippet', () => {
     occurrences.forEach((o) => {
       expect(o.file).toMatch(/app\.ts$/)

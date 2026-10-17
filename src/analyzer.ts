@@ -1,7 +1,9 @@
 import {
+  type CallExpression,
   type Identifier,
   type Symbol as MorphSymbol,
-  type Node,
+  type NewExpression,
+  Node,
   type Project,
   type SourceFile,
   SyntaxKind,
@@ -45,6 +47,37 @@ const resolveSymbol = (id: Identifier): MorphSymbol | undefined => {
   return aliased ?? sym;
 };
 
+const OVERLOAD_KINDS: ReadonlySet<SyntaxKind> = new Set([
+  SyntaxKind.FunctionDeclaration,
+  SyntaxKind.MethodDeclaration,
+  SyntaxKind.MethodSignature,
+  SyntaxKind.Constructor,
+]);
+
+const callOf = (id: Identifier): CallExpression | NewExpression | undefined => {
+  const parent = id.getParent();
+  const callee =
+    Node.isPropertyAccessExpression(parent) && parent.getNameNode() === id ? parent : id;
+  const call = callee.getParent();
+  if (!Node.isCallExpression(call) && !Node.isNewExpression(call)) return undefined;
+  return call.getExpression() === callee ? call : undefined;
+};
+
+// An overloaded symbol is deprecated per signature: a call counts only when the overload it
+// resolves to is deprecated, any other reference only when every overload is.
+const candidateDecls = (id: Identifier, decls: readonly Node[]): readonly Node[] => {
+  const overloads = decls.filter((d) => OVERLOAD_KINDS.has(d.getKind()));
+  if (overloads.length < 2) return decls;
+  const call = callOf(id);
+  if (call) {
+    const resolved = id.getProject().getTypeChecker().getResolvedSignature(call)?.getDeclaration();
+    return resolved ? [resolved] : [];
+  }
+  return overloads.every((d) => toDeprecation(d))
+    ? decls
+    : decls.filter((d) => !overloads.includes(d));
+};
+
 const trimSnippet = (text: string, max = 120): string => {
   const trimmed = text.trim();
   return trimmed.length > max ? `${trimmed.slice(0, max - 1)}…` : trimmed;
@@ -75,7 +108,7 @@ export const findOccurrences = (project: Project, noDeps = false): readonly Occu
     .flatMap((id) => {
       const sym = resolveSymbol(id);
       if (!sym) return [];
-      for (const decl of sym.getDeclarations()) {
+      for (const decl of candidateDecls(id, sym.getDeclarations())) {
         if (noDeps && decl.getSourceFile().getFilePath().includes("/node_modules/")) continue;
         const dep = toDeprecation(decl);
         if (dep) return [makeOccurrence(id, dep)];

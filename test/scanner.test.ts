@@ -11,7 +11,7 @@ describe('collectDeprecations (custom-deprecated fixture)', () => {
   const byName = new Map(deprecations.map((d) => [d.qualifiedName, d]))
 
   test('finds all 4 deprecated symbols', () => {
-    expect(deprecations.length).toBe(4)
+    expect(deprecations.length).toBe(5)
   })
 
   test('oldFn uses {@link} source', () => {

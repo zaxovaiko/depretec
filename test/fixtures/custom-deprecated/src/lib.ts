@@ -29,3 +29,12 @@ export class Legacy {
  * @deprecated
  */
 export function uncatalogued(): void {}
+
+/**
+ * @deprecated Pass a number instead.
+ */
+export function pick(value: string): string
+export function pick(value: number): number
+export function pick(value: string | number): string | number {
+  return value
+}
