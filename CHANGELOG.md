@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.4](https://github.com/zaxovaiko/depretec/compare/v0.2.3...v0.2.4) (2026-10-17)
+
+
+### Bug Fixes
+
+* replace old name ([4b80631](https://github.com/zaxovaiko/depretec/commit/4b806313cee28f43639a321ee41bb28baad53111))
+* resolve overloaded calls to the called signature ([23f5413](https://github.com/zaxovaiko/depretec/commit/23f5413662af79398b78ba8f514719f2c621a48a))
+
 ## [0.2.3](https://github.com/zaxovaiko/depretec/compare/v0.2.2...v0.2.3) (2026-04-16)
 
 
